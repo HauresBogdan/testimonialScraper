@@ -1,8 +1,8 @@
 const express = require("express");
-var bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
 const app = express();
 const scrapePage = require('./pageScrapper');
-var cors = require('cors');
+const cors = require('cors');
 
 app.use(cors());
 
@@ -14,18 +14,15 @@ app.use(bodyParser.json())
 
 app.post("/testimonials", async function (req, res) {
 
+  const page = req.body.page;
+  const currentCountry = req.body.currentCountry;
+  let currentPage = 0;
+  currentPage = page; 
+  const URL =`https://assist-software.net${currentCountry.countryLink}?page=${currentPage}`
 
- const page = req.body.page;
- 
-  
- let currentPage = 0;
- currentPage = page;
-
- scrapePage(currentPage).then((result) => {    
-    res.send(result);
- })
-
-
+  scrapePage(URL).then((result) => {    
+      res.send(result);
+  })
 });
 
 const PORT = 5000;
