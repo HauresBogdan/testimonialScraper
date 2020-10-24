@@ -7,13 +7,17 @@ module.exports = async function scrape(currentPage) {
   await page.goto(`https://assist-software.net/testimonials?page=${currentPage}`
   );
 
+  //for making consol.log work inside evaluate function
+  page.on('console', msg => {
+    for (let i = 0; i < msg.args().length; ++i)
+      console.log(`${i}: ${msg.args()[i]}`);
+  });
+
   const myJSON = await page.evaluate(() => {
     const data = [];
     //get author info
-    $(".testimonial-author").each((i, el) => {
-      //for some reason I think the foreach inludes also the closing tags of the elements
-      //so here we discard the closing tags by doing i%2==0
-      if (i % 2 == 0) {
+    $("div[class='testimonial-author']").each((i, el) => {
+      
         const privateLink = $(el).find("a").attr("href");
         const author = $(el).find(".testimonial-author").text().trim();
         const job = $(el).find(".testimonial-job").text().trim();
@@ -31,9 +35,9 @@ module.exports = async function scrape(currentPage) {
           country: country,
           imgLink: imgLink,
         };
-
+        
         data.push(puzzleJSON1);
-      }
+    
     });
 
     //get total pages
@@ -50,13 +54,16 @@ module.exports = async function scrape(currentPage) {
 
     const totalPages = Math.max(...totalPagesArray);
 
+    
     return {
       totalpages: totalPages,
       header: document.querySelector("h1").innerText,
       headerIMG: getComputedStyle(document.getElementById("page-header")).backgroundImage,
       subheader: document.getElementById("block-block-18").innerText,
+
       filterLabel: $(".view-testimonial-author-filters .view-content").find("span:first-child").text(),
-      bottomHeader: $(".col-md-12 h2").text().trim(),
+      bottomBanner: $(".col-md-12 h2").text().trim(),
+      bottomBannerColor: $("#block-block-7").css('background'),
       bottomParagraph: $(".col-md-12 p").text().trim(),
       actionCallText: $(".text-center .btn-default").text(),
       actionCallURL: `https://assist-software.net${$(".text-center .btn-default").attr("href")}`,
