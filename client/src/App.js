@@ -58,7 +58,7 @@ function App() {
       <ul className="country-list">
       { response.countryArray.map(country => 
         <li key={country.countryCode} onClick={() =>{handleCountryChange(country)}} 
-        className={classNames('', { 'flag-active': country.countryCode === currentCountry.countryCodeS})}>
+        className={classNames('', { 'flag-active': country.countryCode === currentCountry.countryCode})}>
           {country.countryCode === "All" ? "":  country.countryCode === "UK" ? 
           <img className="flag" src={`http://catamphetamine.gitlab.io/country-flag-icons/3x2/GB.svg`}  alt="flag"/> :
           <img className="flag" src={`http://catamphetamine.gitlab.io/country-flag-icons/3x2/${country.countryCode}.svg`} alt="flag"/>}

@@ -1,5 +1,5 @@
 const puppeteer = require("puppeteer");
-var $ = require("jquery");
+const $ = require("jquery");
 
 module.exports = async function scrape(URL) {
   const browser = await puppeteer.launch();
